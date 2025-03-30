@@ -22,9 +22,9 @@ title: genomeark
 email: your-email@example.com
 description: >- # this means to ignore newlines until "baseurl:"
   Zadanie zaliczeniowa 2 AWWW
-baseurl: "/jekyll-bootstrap" # the subpath of your site, e.g. /blog
-url: "https://ok-co.github.io" # the base hostname & protocol for your site, e.g. http://example.com
-twitter_username: jekyllrb
+# baseurl: "/jekyll-bootstrap" # the subpath of your site, e.g. /blog
+# url: "https://ok-co.github.io" # the base hostname & protocol for your site, e.g. http://example.com
+# twitter_username: jekyllrb
 github_username:  ok-co
 
 # Build settings
