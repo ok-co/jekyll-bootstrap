@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ page.common_name }}</title>
+    <style>
+        body {
+            display: flex;
+            background: linear-gradient(to bottom, #3f5ac9, #1c2c6b);
+            margin: 0;
+            font-family: 'Courier New', Courier, monospace;
+            color:#d4d8e7;
+
+        }
+        table{
+            width: 80%;
+            margin: 0 auto;
+            border: 2px solid #000;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 8px;
+            text-align: center;
+            border: 0;
+        }
+        .sidebar {
+            width: 15%;
+            padding: 20px;
+            background-color: #101f5c;
+
+        }
+        .content {
+            width: 80%;
+            padding: 20px;
+            position: relative;
+        }
+        .sidebar a {
+            display: block;
+            padding: 10px;
+            color:#d4d8e7;
+        }
+
+        .sidebar a:hover {
+            background-color: #5473f1;
+        }
+        .section-header {
+            text-align: center;
+        }
+        .section-header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+        .section-header::before,
+        .section-header::after {
+            content: "";
+            flex: 1;
+            border-bottom: 2px solid #d4d8e7;
+            margin: 0 20px;
+        }
+        .table-striped>tbody>tr:nth-child(odd)>td, 
+        .table-striped>tbody>tr:nth-child(odd)>th {background-color: transparent; color:#d4d8e7;}
+        .table-striped>tbody>tr:nth-child(even)>td, 
+        .table-striped>tbody>tr:nth-child(even)>th {background-color: #f2f2f28e; color: #000000;}
+        .socials {
+            position: fixed;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+        .socials a {
+            display: block;
+            margin: 10px 0;
+        }
+        .species-image {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 250px;
+            border-radius: 10px;
+            border: 3px solid #000000;
+            z-index: 1;
+        }
+        .leaves{
+            position: fixed;
+            top: 70%;
+            transform: translateY(-50%);
+            z-index: -1;
+            opacity: 0.2;
+        }
+    </style>
+</head>
+
+<body>
+    <img src="{{ '/assets/img/leavesright.svg' | relative_url}}" alt="leavesleft" class="leaves" style="right: 0;">
+    <img src="{{ '/assets/img/leavesleft.svg' | relative_url}}" alt="leavesright" class="leaves" style="left: 0; z-index: 1;">
+    <div class="sidebar">
+        <h1><a href="{{site.baseurl}}" >Main Page</a></h1>
+        <h3>Table of contents</h3>
+        <a href="#taxonomy">Taxonomy</a>
+        <a href="#sequenced-resources">Sequences</a>
+        <a href="#species-info">Information</a>
+    </div>
+    <div class="content">
+        <h1 class="section-header">{{ page.common_name }} (<i>{{ page.name }}</i>)</h1>
+        <img src="{{ page.image | relative_url  }}" alt="{{ page.common_name }}" class="species-image">
+        <section id="taxonomy">
+            <h2 class="section-header">Taxonomy</h2>
+            <p>Family: {{ page.family.name }}</p>
+            <p>Order: {{ page.order.name }}</p>
+        </section>
+        <section id="sequenced-resources">
+            <h2 class="section-header">Sequences</h2>
+            <table class="table table-striped">
+                <tr class="table-primary">
+                    <th class="text-dark">Datatype</th>
+                    <th class="text-dark">Individual</th>
+                    <th class="text-dark">Bases</th>
+                    <th class="text-dark">Coverage</th>
+                    <th class="text-dark">Bytes</th>
+                    <th class="text-dark">URL</th>
+                </tr>
+                {% for sample in page.samples %}
+                <tr>
+                    <td>{{ sample.datatype }}</td>
+                    <td>{{ sample.individual }}</td>
+                    <td>{{ sample.bases }}</td>
+                    <td>{{ sample.coverage }}</td>
+                    <td>{{ sample.bytes }}</td>
+                    <td><a href="{{ sample.url }}" target="_blank"><img src={{"/assets/img/trollface.png" | relative_url }} alt="Link" style="width: 25px;"></a></td>
+                </tr>
+                {% endfor %}
+            </table>
+        </section>
+        <section id="species-info">
+            <h2 class="section-header">Information</h2>
+            {{ page.content | markdownify }}
+        </section>
+    </div>
+
+    <aside>
+    <div class="socials">
+        <a href="https://facebook.com" target="_blank"><img src={{"/assets/img/facebook-icon.png" | relative_url }} alt="Facebook" style="width: 25px;"></a>
+        <a href="https://x.com" target="_blank"><img src={{"/assets/img/x-icon.jpg" | relative_url }} alt="X" style="width: 25px;"></a>
+        <a href="https://reddit.com" target="_blank"><img src={{"/assets/img/reddit0con.svg" | relative_url }} alt="Reddit" style="width: 75px;"></a>
+    </div>
+    </aside>
+</body>
+</html>
