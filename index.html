@@ -15,6 +15,8 @@
 
         body {
             background: linear-gradient( #6483ff, #1e2e6b);
+            background-repeat: no-repeat;
+            background-attachment: fixed;
             display: flex;
             flex-direction: column;
             min-height: 100vh;
@@ -93,38 +95,37 @@
 
 
 <div style="width: 80%; margin: 0 auto; margin-top: 20px; margin-bottom: 20px;">
-<table class="table table-striped">
-    <tr>
-        <th style="width: 15%">Photo</th>
-        <th>Name</th>
-        <th>Family</th>
-        <th>Order</th>
-        <th style="width: 5%">No of sequences</th>
-    </tr>
-    {% for species in site.species %}
-        <tr>
-            {% assign has_bionano = false %}
-            {% for sample in species.samples %}
-                {% if sample.datatype == "Bionano" %}
-                    {% assign has_bionano = true %}
-                    {% break %}
-                {% endif %}
+    <div class="container">
+        <div class="row">
+            {% for species in site.species %}
+                <div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-4">
+                    <div class="card h-100">
+                        <a href="{{ species.url | relative_url }}">
+                            <img src="{{ species.image | relative_url }}" class="card-img-top " alt="{{ species.common_name }}" style="height: 200px; object-fit: cover;">
+                        </a>
+                        <div class="card-body">
+                            <h5 class="card-title">{{ species.common_name }} (<i>{{ species.name }}</i>)</h5>
+                            <p class="card-text">
+                                <strong>Family:</strong> {{ species.family.name }}<br>
+                                <strong>Order:</strong> {{ species.order.name }}<br>
+                                <strong>No of sequences:</strong> {{ species.samples | size }}
+                            </p>
+                            {% assign has_bionano = false %}
+                            {% for sample in species.samples %}
+                                {% if sample.datatype == "Bionano" %}
+                                    {% assign has_bionano = true %}
+                                    {% break %}
+                                {% endif %}
+                            {% endfor %}
+                            {% if has_bionano %}
+                                <span style="position: absolute; top: -10px; left: -15px;" class="badge bg-danger">Bionano</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
             {% endfor %}
-            
-            <th style="position: relative;">{% if has_bionano %}
-                <div style="position: absolute; left: -20px; top: -5px; background-color: rgb(255, 0, 0); color: white; width: 60px; font-size: 12px; text-align: center; border-radius: 7px;">Bionano</div>
-                {% endif %}
-            <a href="{{ species.url | relative_url }}"><img src="{{ species.image | relative_url}}" alt="{{ species.common_name }}" style="width:200px; border-radius: 5%;"></a>
-            </th>
-            <th style="font-size: 30px; text-align: center;">{{species.common_name}} (<i>{{ species.name }}</i>)</th>
-            <th>{{species.family.name}}</th>
-            <th>{{species.order.name}}</th>
-            <th>{{species.samples | size}}</th>
-            
-        </tr>
-    {% endfor %}
-
-</table>
+        </div>
+    </div>
 </div>
 
 <div style="height: 20px;"></div>

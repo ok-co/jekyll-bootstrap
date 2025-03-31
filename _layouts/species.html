@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head lang="en">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ page.common_name }}</title>
@@ -11,10 +12,10 @@
             margin: 0;
             font-family: 'Courier New', Courier, monospace;
             color:#d4d8e7;
-
+            
         }
         table{
-            width: 80%;
+            width: 55%;
             margin: 0 auto;
             border: 2px solid #000;
             border-collapse: collapse;
@@ -31,7 +32,7 @@
 
         }
         .content {
-            width: 80%;
+            width: 85%;
             padding: 20px;
             position: relative;
         }
@@ -69,6 +70,7 @@
             right: 10px;
             top: 50%;
             transform: translateY(-50%);
+            
         }
         .socials a {
             display: block;
@@ -89,30 +91,63 @@
             transform: translateY(-50%);
             z-index: -1;
             opacity: 0.2;
+            pointer-events: none;
         }
+
     </style>
 </head>
 
-<body>
+<body data-bs-spy="scroll" data-bs-target=".sidebar" data-bs-offset="0" tabindex="0">
     <img src="{{ '/assets/img/leavesright.svg' | relative_url}}" alt="leavesleft" class="leaves" style="right: 0;">
     <img src="{{ '/assets/img/leavesleft.svg' | relative_url}}" alt="leavesright" class="leaves" style="left: 0; z-index: 1;">
-    <div class="sidebar">
+    
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">WM</a>
+            <div>
+                <ul class="navbar-nav ms-auto flex-row">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                            Species
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-dark">
+                            {% for species in site.species %}
+                                <li><a class="dropdown-item" href="{{ species.url | relative_url }}">{{ species.common_name }}</a></li>
+                            {% endfor %}
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="about">About us</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="contact">Contact</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="sidebar nav flex-column nav-pills" style="position: sticky; top: 50px; height: calc(100vh - 50px);">
         <h1><a href="{{site.baseurl}}" >Main Page</a></h1>
         <h3>Table of contents</h3>
-        <a href="#taxonomy">Taxonomy</a>
-        <a href="#sequenced-resources">Sequences</a>
-        <a href="#species-info">Information</a>
+        <a class="nav-link" href="#taxonomy">Taxonomy</a>
+        <a class="nav-link" href="#sequences">Sequences</a>
+        <a class="nav-link" href="#species-info">Information</a>
+        <a class="nav-link" href="#comments">Comments</a>
     </div>
-    <div class="content">
+
+    <div class="content" style="margin-top: 70px;">
         <h1 class="section-header">{{ page.common_name }} (<i>{{ page.name }}</i>)</h1>
         <img src="{{ page.image | relative_url  }}" alt="{{ page.common_name }}" class="species-image">
         <section id="taxonomy">
             <h2 class="section-header">Taxonomy</h2>
             <p>Family: {{ page.family.name }}</p>
             <p>Order: {{ page.order.name }}</p>
+            <div style="height: 50px;"></div>
         </section>
-        <section id="sequenced-resources">
+        <section id="sequences">
             <h2 class="section-header">Sequences</h2>
+            <div style="width: 70%; margin: 0 auto; padding: 30px;">
             <table class="table table-striped">
                 <tr class="table-primary">
                     <th class="text-dark">Datatype</th>
@@ -133,19 +168,54 @@
                 </tr>
                 {% endfor %}
             </table>
+            </div>
         </section>
         <section id="species-info">
             <h2 class="section-header">Information</h2>
             {{ page.content | markdownify }}
         </section>
+        <section id="comments">
+            <h2 class="section-header">Comments</h2>
+            <div class="text-center my-4" style="position: fixed; bottom: 20px; width: 100%;"></div>
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#commentModal">
+                    Add comment
+                </button>
+            </div>
+        </section>
     </div>
 
-    <aside>
-    <div class="socials">
-        <a href="https://facebook.com" target="_blank"><img src={{"/assets/img/facebook-icon.png" | relative_url }} alt="Facebook" style="width: 25px;"></a>
-        <a href="https://x.com" target="_blank"><img src={{"/assets/img/x-icon.jpg" | relative_url }} alt="X" style="width: 25px;"></a>
-        <a href="https://reddit.com" target="_blank"><img src={{"/assets/img/reddit0con.svg" | relative_url }} alt="Reddit" style="width: 75px;"></a>
+<div class="modal fade" id="commentModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="commentModalLabel">Comment for: {{ page.common_name }}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="commentForm">
+                    <div class="mb-3">
+                        <label for="Email" class="form-label">Email</label>
+                        <input type="email" class="form-control" id="authorEmail" placeholder="name@domain.tld" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="Text" class="form-label">Comment</label>
+                        <textarea class="form-control" id="commentText" rows="8" placeholder="text" required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-success">Send</button>
+                </form>
+            </div>
+        </div>
     </div>
+</div>
+
+    <aside>
+        <div class="socials">
+            <a href="https://facebook.com" target="_blank"><img src={{"/assets/img/facebook-icon.png" | relative_url }} alt="Facebook" style="width: 25px;"></a>
+            <a href="https://x.com" target="_blank"><img src={{"/assets/img/x-icon.jpg" | relative_url }} alt="X" style="width: 25px;"></a>
+            <a href="https://reddit.com" target="_blank"><img src={{"/assets/img/reddit0con.svg" | relative_url }} alt="Reddit" style="width: 75px;"></a>
+        </div>
     </aside>
+    
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </body>
 </html>
